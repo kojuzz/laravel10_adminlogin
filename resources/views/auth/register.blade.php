@@ -10,6 +10,7 @@
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner py-4">
+
                 <!-- Register Card -->
                 <div class="card">
                     <div class="card-body">
@@ -31,16 +32,28 @@
                         <p class="mb-4">Register to your account</p>
 
                         {{-- Form --}}
-                        <form id="formAuthentication" class="mb-3" action="index.html" method="GET">
+                        <form id="formAuthentication" class="mb-3" action="{{ route("register.post") }}" method="POST">
+                            @csrf
                             <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" name="username"
-                                    placeholder="Enter your username" autofocus />
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" autofocus />
+                                @error("name")
+                                    <div class="text-danger text-sm">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username (Optional)</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" autofocus />
+                                @error("username")
+                                    <div class="text-danger text-sm">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="text" class="form-control" id="email" name="email"
-                                    placeholder="Enter your email" />
+                                <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" />
+                                @error("email")
+                                    <div class="text-danger text-sm">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="mb-3 form-password-toggle">
                                 <label class="form-label" for="password">Password</label>
@@ -72,6 +85,7 @@
                             </a>
                         </p>
 
+                        {{-- Divider --}}
                         <div class="divider my-4">
                             <div class="divider-text">or</div>
                         </div>
@@ -92,8 +106,21 @@
                         </div>
                     </div>
                 </div>
-                <!-- Register Card -->
+                
             </div>
         </div>
     </div>
+@endsection
+
+@section("scripts")
+    {{-- Live Validate --}}
+    <script src="{{ asset("assets/js/popular.js") }}"></script>
+    <script src="{{ asset("assets/js/bootstrap5.js") }}"></script>
+    <script src="{{ asset("assets/js/auto-focus.js") }}"></script>
+
+    {{-- Check Auth --}}
+    <script src="{{ asset("assets/js/pages-auth.js") }}"></script>
+
+    {{-- Eye On/Off --}}
+    <script src="{{ asset("assets/js/helpers.js") }}"></script>
 @endsection

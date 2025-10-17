@@ -7,14 +7,14 @@
 @endsection
 
 @section("content")
-
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner py-4">
 
+                {{-- Login Card --}}
                 <div class="card">
                     <div class="card-body">
-                        
+                
                         {{-- Logo --}}
                         <div class="app-brand justify-content-center mb-4 mt-2">
                             <a href="{{ route("login") }}" class="app-brand-link gap-2">
@@ -32,8 +32,8 @@
                         <p class="mb-4">Please sign-in to your account.</p>
 
                         {{-- Form --}}
-                        <form id="formAuthentication" class="mb-3" action="index.html" method="GET">
-
+                        <form id="formAuthentication" class="mb-3" action="{{ route("login.post") }}" method="POST">
+                            @csrf
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email or Username</label>
                                 <input type="text" class="form-control" id="email" name="email-username"
@@ -74,10 +74,12 @@
                             </a>
                         </p>
 
+                        {{-- Divider --}}
                         <div class="divider my-4">
                             <div class="divider-text">or</div>
                         </div>
 
+                        {{-- Social Login --}}
                         <div class="d-flex justify-content-center">
                             <a href="javascript:;" class="btn btn-icon btn-label-facebook me-3">
                                 <i class="tf-icons fa-brands fa-facebook-f fs-5"></i>
@@ -93,8 +95,20 @@
                         </div>
                     </div>
                 </div>
-                <!-- /Register -->
             </div>
         </div>
     </div>
+@endsection
+
+@section("scripts")
+    {{-- Live Validate --}}
+    <script src="{{ asset("assets/js/popular.js") }}"></script>
+    <script src="{{ asset("assets/js/bootstrap5.js") }}"></script>
+    <script src="{{ asset("assets/js/auto-focus.js") }}"></script>
+
+    {{-- Check Auth --}}
+    <script src="{{ asset("assets/js/pages-auth.js") }}"></script>
+
+    {{-- Eye On/Off --}}
+    <script src="{{ asset("assets/js/helper.js") }}"></script>
 @endsection

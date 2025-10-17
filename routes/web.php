@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,11 +16,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'login'])->name('login');
-    Route::get('/register', [AuthController::class, 'register'])->name('register');
-    Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot-password');
+    Route::get('/register', [PageController::class, 'register'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
+    Route::get('/login', [PageController::class, 'login'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::get('/forgot-password', [PageController::class, 'forgotPassword'])->name('forgot-password');
 });
 
-Route::get('/', function () {
-    return view('welcome');
-})->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/', function () {
+        return view('welcome');
+    })->name('welcome');
+});
