@@ -17,6 +17,7 @@ class AuthController extends Controller
         $this->adminUserService = $adminUserService;
     }
 
+    // Register
     public function register(AdminUserRegisterRequest $request)
     {
         $user = $request->validated();
@@ -30,22 +31,26 @@ class AuthController extends Controller
         return redirect()->route("login");
     }
 
+    // Login
     public function login(AdminUserLoginRequest $request)
     {
         $user = $request->validated();
         try {
             $this->adminUserService->login($user);
+            return redirect()->route("welcome");
         } catch (Exception $e) {
             return redirect()->back()->withErrors($e->getMessage());
         }
         return redirect()->route("login");
     }
 
+    // Forgot Password
     public function forgotPassword()
     {
         return view('auth.forgot-password');
     }
-    
+
+    // Logout
     public function logout()
     {
         Auth::logout();

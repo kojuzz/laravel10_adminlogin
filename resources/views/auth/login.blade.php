@@ -36,8 +36,10 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email or Username</label>
-                                <input type="text" class="form-control" id="email" name="email-username"
-                                    placeholder="Enter your email or username" autofocus />
+                                <input type="text" class="form-control" id="email" name="email-username" placeholder="Enter your email or username" autofocus />
+                                @error("email-username")
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3 form-password-toggle">
@@ -49,15 +51,16 @@
                                 </div>
 
                                 <div class="input-group input-group-merge">
-                                    <input type="password" id="password" class="form-control" name="password"
-                                        placeholder="Enter your Password"
-                                        aria-describedby="password" />
+                                    <input type="password" id="password" class="form-control" name="password" placeholder="Enter your Password" aria-describedby="password" />
                                     <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                                 </div>
+                                @error("password")
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="mb-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="remember-me" />
+                                    <input class="form-check-input" type="checkbox" id="remember-me" name="remember" />
                                     <label class="form-check-label" for="remember-me"> Remember Me </label>
                                 </div>
                             </div>

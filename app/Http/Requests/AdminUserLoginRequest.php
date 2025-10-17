@@ -24,6 +24,7 @@ class AdminUserLoginRequest extends FormRequest
         return [
             'email-username' => 'required|min:6',
             'password' => 'required',
+            'remember' => 'nullable',
         ];
     }
 }

@@ -22,13 +22,10 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [PageController::class, 'login'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
-    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
     Route::get('/forgot-password', [PageController::class, 'forgotPassword'])->name('forgot-password');
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/', function () {
-        return view('welcome');
-    })->name('welcome');
+    Route::view('/', 'welcome')->name('welcome');
 });
