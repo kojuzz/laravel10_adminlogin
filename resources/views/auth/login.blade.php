@@ -31,14 +31,21 @@
                         <h4 class="mb-1 pt-2">Welcome Admin</h4>
                         <p class="mb-4">Please sign-in to your account.</p>
 
+                        {{-- Error Message --}}
+                        @error('failed')
+                            <div class="alert text-center alert-danger">
+                                {{ $message }}
+                            </div>
+                        @enderror
+
                         {{-- Form --}}
                         <form id="formAuthentication" class="mb-3" action="{{ route("login.post") }}" method="POST">
                             @csrf
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email or Username</label>
-                                <input type="text" class="form-control" id="email" name="email-username" placeholder="Enter your email or username" autofocus />
+                                <input type="text" class="form-control" id="email" name="email-username" placeholder="Enter your email or username" autocomplete="off" autofocus />
                                 @error("email-username")
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="text-danger text-sm">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -51,11 +58,11 @@
                                 </div>
 
                                 <div class="input-group input-group-merge">
-                                    <input type="password" id="password" class="form-control" name="password" placeholder="Enter your Password" aria-describedby="password" />
+                                    <input type="password" id="password" class="form-control" name="password" placeholder="Enter your password" aria-describedby="password" />
                                     <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                                 </div>
                                 @error("password")
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="text-danger text-sm">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3">

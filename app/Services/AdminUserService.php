@@ -16,7 +16,7 @@ class AdminUserService
     // Register
     public function register($data)
     {
-        $response = $this->adminUserRepository->register($data);
+        $response = $this->adminUserRepository->create($data);
         return $response;
     }
 
@@ -24,16 +24,14 @@ class AdminUserService
     public function login($data)
     {
         $loginField = filter_var($data['email-username'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-
+        $remember = $data['remember'] ?? false;
         $credentials = [
             $loginField => $data['email-username'],
             'password' => $data['password'],
         ];
-
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $remember)) {
             return Auth::user();
         }
-
-        return null; // login fail
+        return null;
     }
 }

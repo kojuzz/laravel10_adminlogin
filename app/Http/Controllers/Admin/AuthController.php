@@ -26,9 +26,10 @@ class AuthController extends Controller
             Auth::login($user);
             return redirect()->route("welcome");
         } catch (Exception $e) {
-            return redirect()->back()->withErrors($e->getMessage());
+            return back()->withErrors([
+                "failed" => $e->getMessage()
+            ]);
         }
-        return redirect()->route("login");
     }
 
     // Login
@@ -36,10 +37,17 @@ class AuthController extends Controller
     {
         $user = $request->validated();
         try {
-            $this->adminUserService->login($user);
-            return redirect()->route("welcome");
+            if ($this->adminUserService->login($user)) {
+                return redirect()->route("welcome");
+            } else {
+                return back()->withErrors([
+                    "failed" => "The credentials do not match our records."
+                ]);
+            }
         } catch (Exception $e) {
-            return redirect()->back()->withErrors($e->getMessage());
+            return back()->withErrors([
+                "failed" => $e->getMessage()
+            ]);
         }
         return redirect()->route("login");
     }

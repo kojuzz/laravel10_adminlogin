@@ -22,7 +22,7 @@ class AdminUserLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email-username' => 'required|min:6',
+            'email-username' => 'required',
             'password' => 'required',
             'remember' => 'nullable',
         ];

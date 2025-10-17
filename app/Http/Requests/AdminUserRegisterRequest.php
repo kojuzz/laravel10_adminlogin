@@ -32,7 +32,8 @@ class AdminUserRegisterRequest extends FormRequest
                 'nullable',
                 'string',
                 'max:255',
-                'regex:/^[a-z][a-z0-9!@#$%^&*()_+\-=\[\]{};\'",.<>\/?]*$/'
+                'regex:/^[a-z][a-z0-9!@#$%^&*()_+\-=\[\]{};\'",.<>\/?]*$/',
+                'unique:users',
             ],
             "email" => [
                 'required',
@@ -44,7 +45,7 @@ class AdminUserRegisterRequest extends FormRequest
             "password" => [
                 'required',
                 'string',
-                'min:8',
+                'min:6',
             ],
         ];
     }
@@ -53,6 +54,7 @@ class AdminUserRegisterRequest extends FormRequest
         return [
             "name.regex" => "Name must start with a letter.",
             "username.regex" => "Username must start with a letter and can only contain letters, numbers, and special characters.",
+            "username.unique" => "Username already exists.",
         ];
     }
 }
