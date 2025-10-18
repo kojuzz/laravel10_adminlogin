@@ -24,11 +24,11 @@ class AuthController extends Controller
         try {
             $user = $this->adminUserService->register($user);
             Auth::login($user);
-            return redirect()->route("welcome");
+            return redirect()->route("dashboard");
         } catch (Exception $e) {
             return back()->withErrors([
                 "failed" => $e->getMessage()
-            ]);
+            ])->withInput();
         }
     }
 
@@ -38,16 +38,16 @@ class AuthController extends Controller
         $user = $request->validated();
         try {
             if ($this->adminUserService->login($user)) {
-                return redirect()->route("welcome");
+                return redirect()->route("dashboard");
             } else {
                 return back()->withErrors([
                     "failed" => "The credentials do not match our records."
-                ]);
+                ])->withInput();
             }
         } catch (Exception $e) {
             return back()->withErrors([
                 "failed" => $e->getMessage()
-            ]);
+            ])->withInput();
         }
         return redirect()->route("login");
     }

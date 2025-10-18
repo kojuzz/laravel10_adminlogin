@@ -8,10 +8,10 @@
     <title>@yield('title')</title>
     <meta name="description" content="@yield('description', '')" />
     
-    <!-- Favicon -->
+    {{-- Favicon --}}
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/svg/vuexy.svg') }}" />
 
-    <!-- Fonts -->
+    {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
@@ -20,12 +20,16 @@
     <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/tabler-icons.css') }}" />
 
-    <!-- Core CSS -->
+    {{-- Core CSS --}}
     <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/theme-default.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/core.css') }}" />
 
-    <!-- Custom CSS -->
+    {{-- Helper & Config JS --}}
+    <script src="{{ asset('assets/js/helpers.js') }}"></script>
+    <script src="{{ asset('assets/js/config.js') }}"></script>
+    
+    {{-- Custom CSS --}}
     @yield('styles')
 </head>
 
@@ -33,11 +37,24 @@
     {{-- Content --}}
     @yield('content')
 
-    {{-- Custom Script --}}
+    {{-- Core JS --}}
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
     <script src="{{ asset('assets/js/popper.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/node-waves.js') }}"></script> --}}
+    {{-- <script src="{{ asset('assets/js/perfect-scrollbar.js') }}"></script> --}}
+    {{-- <script src="{{ asset('assets/js/hammer.js') }}"></script> --}}
+
+    <script src="{{ asset('assets/js/menu.js') }}"></script>
+    
+    {{-- Live Validate --}}
+    <script src="{{ asset("assets/js/popular.js") }}"></script>
+    <script src="{{ asset("assets/js/bootstrap5.js") }}"></script>
+    <script src="{{ asset("assets/js/auto-focus.js") }}"></script>
+
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/dashboards-analytics.js') }}"></script> --}}
+    {{-- Custom Script --}}
     @yield('scripts')
 </body>
 </html>

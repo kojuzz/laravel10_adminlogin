@@ -43,7 +43,7 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email or Username</label>
-                                <input type="text" class="form-control" id="email" name="email-username" placeholder="Enter your email or username" autocomplete="off" autofocus />
+                                <input type="text" class="form-control" id="email" name="email-username" placeholder="Enter your email or username" value="{{ old("email-username") }}" autocomplete="off" autofocus />
                                 @error("email-username")
                                     <div class="text-danger text-sm">{{ $message }}</div>
                                 @enderror
@@ -111,14 +111,6 @@
 @endsection
 
 @section("scripts")
-    {{-- Live Validate --}}
-    <script src="{{ asset("assets/js/popular.js") }}"></script>
-    <script src="{{ asset("assets/js/bootstrap5.js") }}"></script>
-    <script src="{{ asset("assets/js/auto-focus.js") }}"></script>
-
     {{-- Check Auth --}}
     <script src="{{ asset("assets/js/pages-auth.js") }}"></script>
-
-    {{-- Eye On/Off --}}
-    <script src="{{ asset("assets/js/helper.js") }}"></script>
 @endsection

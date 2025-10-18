@@ -123,14 +123,6 @@
 @endsection
 
 @section("scripts")
-    {{-- Live Validate --}}
-    <script src="{{ asset("assets/js/popular.js") }}"></script>
-    <script src="{{ asset("assets/js/bootstrap5.js") }}"></script>
-    <script src="{{ asset("assets/js/auto-focus.js") }}"></script>
-
     {{-- Check Auth --}}
     <script src="{{ asset("assets/js/pages-auth.js") }}"></script>
-
-    {{-- Eye On/Off --}}
-    <script src="{{ asset("assets/js/helpers.js") }}"></script>
 @endsection
