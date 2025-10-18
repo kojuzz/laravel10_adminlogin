@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::view('/welcome', 'welcome')->name('welcome');
+
 Route::middleware('guest')->group(function () {
     Route::get('/register', [PageController::class, 'register'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
@@ -29,5 +31,4 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/', [AdminPageController::class, 'index'])->name('dashboard');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::view('/welcome', 'welcome')->name('welcome');
 });
