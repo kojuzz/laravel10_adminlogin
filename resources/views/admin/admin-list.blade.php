@@ -14,6 +14,7 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Admin Name</th>
                         <th>Admin Email</th>
                         <th>Username</th>
@@ -23,6 +24,7 @@
                 <tbody class="table-border-bottom-0">
                     @foreach ($admins as $admin)
                         <tr>
+                            <td>{{ ($admins->currentPage() - 1) * $admins->perPage() + $loop->iteration }}</td>
                             <td>
                                 <span class="fw-medium">{{ $admin->name }}</span>
                             </td>

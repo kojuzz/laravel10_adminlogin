@@ -16,4 +16,8 @@ class PageController extends Controller
     {
         return view('auth.forgot-password');
     }
+    public function twoStep()
+    {
+        return view('auth.two-step');
+    }
 }

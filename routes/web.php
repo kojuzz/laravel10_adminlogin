@@ -23,6 +23,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [PageController::class, 'register'])->name('register');
     Route::get('/login', [PageController::class, 'login'])->name('login');
     Route::get('/forgot-password', [PageController::class, 'forgotPassword'])->name('forgot-password');
+    Route::get('/two-step', [PageController::class, 'twoStep'])->name('two-step');
     
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');

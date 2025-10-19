@@ -37,17 +37,18 @@ class AuthController extends Controller
     {
         $user = $request->validated();
         try {
-            if ($this->adminUserService->login($user)) {
-                return redirect()->route("admin.dashboard")->with('success', 'Login successfully');
+            $response = $this->adminUserService->login($user);
+            if ($response['status'] == 'success') {
+                if($response['is_verified']){
+                    return redirect()->route("admin.dashboard")->with('success', $response['message']);
+                }else{
+                    return redirect()->route("two-step")->with('success', $response['message']);
+                }
             } else {
-                return back()->with([
-                    "failed" => "The credentials do not match our records."
-                ])->withInput();
+                return back()->with("failed", $response['message'])->withInput();
             }
         } catch (Exception $e) {
-            return back()->with([
-                "failed" => $e->getMessage()
-            ])->withInput();
+            return back()->with("failed", $e->getMessage())->withInput();
         }
         return redirect()->route("login");
     }

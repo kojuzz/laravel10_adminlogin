@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\AdminUserRepository;
+use App\Repositories\OTPRepository;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -10,9 +11,11 @@ use Illuminate\Support\Facades\Hash;
 class AdminUserService
 {
     protected $adminUserRepository;
-    public function __construct(AdminUserRepository $adminUserRepository)
+    protected $otpRepository;
+    public function __construct(AdminUserRepository $adminUserRepository, OTPRepository $otpRepository)
     {
         $this->adminUserRepository = $adminUserRepository;
+        $this->otpRepository = $otpRepository;
     }
 
     // Register
@@ -32,7 +35,24 @@ class AdminUserService
             'password' => $data['password'],
         ];
         if (Auth::attempt($credentials, $remember)) {
-            return Auth::user();
+            $user = Auth::user();
+            if($user->email_verified_at){
+                return $response = [
+                    "is_verified" => true,
+                    "status" => "success",
+                    "message" => "Login successfully",
+                    "user" => $user
+                ];
+            }else{
+                $otp = $this->otpRepository->send($user->email);
+                Auth::logout();
+                return $response = [
+                    "is_verified" => false,
+                    "status" => "success",
+                    "message" => "Please check your email for verification code",
+                    "user" => $user
+                ];
+            }
         }
         return null;
     }

@@ -74,7 +74,7 @@ php artisan serve
 
 Open your browser and navigate to http://localhost:8000
 
-Use the following credentials to log in:
+Register as a user or use the following credentials to log in:
 
 > username: jon
 >

@@ -31,7 +31,7 @@ class PageController extends Controller
 
     public function adminList()
     {
-        $admins = User::latest()->paginate(10);
+        $admins = User::latest()->paginate(15);
         return view('admin.admin-list', [
             'admins' => $admins
         ]);
