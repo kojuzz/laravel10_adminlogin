@@ -37,7 +37,7 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="tables-datatables-basic.html" class="menu-link">
+                    <a href="{{ route("admin.admin-list") }}" class="menu-link">
                         <div data-i18n="Admins">View Admins</div>
                     </a>
                 </li>
