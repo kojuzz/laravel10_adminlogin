@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Repositories\AdminUserRepository;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminUserService
 {
@@ -33,5 +35,24 @@ class AdminUserService
             return Auth::user();
         }
         return null;
+    }
+
+    // Update
+    public function update($data, $id)
+    {
+        $response = $this->adminUserRepository->update($data, $id);
+        return "Profile updated successfully";
+    }
+
+    // Change Password
+    public function changePassword($data, $id)
+    {
+        if (!Hash::check($data['current_password'], Auth::user()->password)) {
+            throw new Exception("Old password is incorrect");
+        }
+        $response = $this->adminUserRepository->update([
+            'password' => Hash::make($data['new_password'])
+        ], $id);
+        return "Password changed successfully";
     }
 }

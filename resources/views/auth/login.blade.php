@@ -7,6 +7,15 @@
 @endsection
 
 @section("content")
+    {{-- Flash Message --}}
+    <div class="row">
+        @if (session("success"))
+            <x-flash :msg="session('success')" />
+        @elseif (session("failed"))
+            <x-flash :msg="session('failed')" bg="alert-danger" />
+        @endif
+    </div>
+    
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner py-4">
@@ -30,13 +39,6 @@
                         {{-- Title --}}
                         <h4 class="mb-1 pt-2">Welcome Admin</h4>
                         <p class="mb-4">Please sign-in to your account.</p>
-
-                        {{-- Error Message --}}
-                        @error('failed')
-                            <div class="alert text-center alert-danger">
-                                {{ $message }}
-                            </div>
-                        @enderror
 
                         {{-- Form --}}
                         <form id="formAuthentication" class="mb-3" action="{{ route("login.post") }}" method="POST">

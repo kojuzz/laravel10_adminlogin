@@ -22,4 +22,9 @@ class AdminUserRepository
         }
         return User::create($data);
     }
+
+    public function update($data, $id)
+    {
+        return User::where('id', $id)->update($data);
+    }
 }

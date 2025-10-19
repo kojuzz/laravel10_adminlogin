@@ -24,9 +24,9 @@ class AuthController extends Controller
         try {
             $user = $this->adminUserService->register($user);
             Auth::login($user);
-            return redirect()->route("dashboard");
+            return redirect()->route("admin.dashboard");
         } catch (Exception $e) {
-            return back()->withErrors([
+            return back()->with([
                 "failed" => $e->getMessage()
             ])->withInput();
         }
@@ -38,20 +38,20 @@ class AuthController extends Controller
         $user = $request->validated();
         try {
             if ($this->adminUserService->login($user)) {
-                return redirect()->route("dashboard");
+                return redirect()->route("admin.dashboard")->with('success', 'Login successfully');
             } else {
-                return back()->withErrors([
+                return back()->with([
                     "failed" => "The credentials do not match our records."
                 ])->withInput();
             }
         } catch (Exception $e) {
-            return back()->withErrors([
+            return back()->with([
                 "failed" => $e->getMessage()
             ])->withInput();
         }
         return redirect()->route("login");
     }
-
+    
     // Forgot Password
     public function forgotPassword()
     {

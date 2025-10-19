@@ -33,7 +33,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                        <span class="dropdown-item">
+                        <a class="dropdown-item" href="{{ route("admin.dashboard") }}">
                             <div class="d-flex">
                                 <div class="flex-shrink-0 me-3">
                                     <div class="avatar avatar-online">
@@ -49,19 +49,19 @@
                                     <small class="text-muted">Admin</small>
                                 </div>
                             </div>
-                        </span>
+                        </a>
                     </li>
                     <li>
                         <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="pages-profile-user.html">
+                        <a class="dropdown-item" href="{{ route("admin.edit") }}">
                             <i class="ti ti-user-check me-2 ti-sm"></i>
                             <span class="align-middle">Manage Profile</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="pages-account-settings-account.html">
+                        <a class="dropdown-item" href="{{ route("admin.change-password") }}">
                             <i class="ti ti-lock me-2 ti-sm"></i>
                             <span class="align-middle">Change Password</span>
                         </a>
@@ -70,7 +70,7 @@
                         <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="{{ route("logout") }}">
+                        <a class="dropdown-item" href="{{ route("admin.logout") }}">
                             <i class="ti ti-logout me-2 ti-sm"></i>
                             <span class="align-middle">Log Out</span>
                         </a>

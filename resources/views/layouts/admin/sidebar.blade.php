@@ -1,7 +1,7 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
 
-        <a href="{{ route("dashboard") }}" class="app-brand-link">
+        <a href="{{ route("admin.dashboard") }}" class="app-brand-link">
             <span class="app-brand-logo demo">
                 <x-svg icon="vuexy" />
             </span>
@@ -20,7 +20,7 @@
 
         {{-- Dashboard --}}
         <li class="menu-item">
-            <a href="{{ route("dashboard") }}" class="menu-link">
+            <a href="{{ route("admin.dashboard") }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div data-i18n="Leaflet Maps">Dashboard</div>
             </a>
@@ -38,12 +38,12 @@
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="tables-datatables-basic.html" class="menu-link">
-                        <div data-i18n="About">About</div>
+                        <div data-i18n="Admins">View Admins</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="tables-datatables-advanced.html" class="menu-link">
-                        <div data-i18n="Advanced">Github</div>
+                        <div data-i18n="About">About</div>
                     </a>
                 </li>
             </ul>
