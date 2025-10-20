@@ -54,6 +54,16 @@
                         <button class="btn btn-primary d-grid w-100">Update Information</button>
                     </form>
 
+                    {{-- Divider --}}
+                    <hr class="my-4" />
+
+                    {{-- Delete Account --}}
+                    <form id="deleteAccountForm" action="{{ route("admin.delete") }}" method="POST"
+                        onsubmit="return confirmDelete()">
+                        @csrf
+                        <button type="submit" class="btn btn-danger d-grid w-100">Delete Account</button>
+                    </form>
+
                 </div>
             </div>
         </div>
@@ -94,4 +104,12 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section("scripts")
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this account? This action cannot be undone.');
+        }
+    </script>
 @endsection

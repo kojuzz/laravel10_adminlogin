@@ -44,11 +44,12 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth', 'checkVerified')->group(function () {
     Route::get('/', [AdminPageController::class, 'index'])->name('admin.dashboard');
     Route::get('about', [AdminPageController::class, 'about'])->name('admin.about');
+    Route::get('admin-list', [AdminPageController::class, 'adminList'])->name('admin.admin-list');
     Route::get('manage-profile', [AdminPageController::class, 'edit'])->name('admin.edit');
     Route::get('change-password', [AdminPageController::class, 'changePassword'])->name('admin.change-password');
-    Route::get('admin-list', [AdminPageController::class, 'adminList'])->name('admin.admin-list');
-
+    
     Route::post('manage-profile', [ProfileController::class, 'update'])->name('admin.update');
+    Route::post('delete', [ProfileController::class, 'delete'])->name('admin.delete');
     Route::post('change-password', [ProfileController::class, 'changePassword'])->name('admin.change-password.post');
 });
 

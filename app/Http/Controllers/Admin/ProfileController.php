@@ -38,4 +38,12 @@ class ProfileController extends Controller
             return back()->with('failed', $e->getMessage())->withInput();
         }
     }
+
+    // Delete Account
+    public function delete()
+    {
+        $id = Auth::user()->id;
+        $this->adminUserService->delete($id);
+        return redirect()->route('login')->with('success', 'Account deleted successfully');
+    }
 }

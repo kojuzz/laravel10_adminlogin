@@ -214,4 +214,11 @@ class AdminUserService
         ], $id);
         return "Password changed successfully";
     }
+
+    // Delete
+    public function delete($id)
+    {
+        $response = $this->adminUserRepository->delete($id);
+        return "Account deleted successfully";
+    }
 }

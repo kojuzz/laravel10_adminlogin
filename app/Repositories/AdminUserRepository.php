@@ -46,4 +46,9 @@ class AdminUserRepository
         $record = User::where('email', $email)->first();
         return $record;
     }
+
+    public function delete($id)
+    {
+        return User::where('id', $id)->delete();
+    }
 }
