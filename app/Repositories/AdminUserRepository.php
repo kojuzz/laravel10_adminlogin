@@ -40,4 +40,10 @@ class AdminUserRepository
         $user->notify(new PasswordReset($token, $email));
         return true;
     }
+
+    public function getByEmail($email)
+    {
+        $record = User::where('email', $email)->first();
+        return $record;
+    }
 }

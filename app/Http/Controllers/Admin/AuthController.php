@@ -23,9 +23,9 @@ class AuthController extends Controller
     // Register
     public function register(AdminUserRegisterRequest $request)
     {
-        $user = $request->validated();
+        $data = $request->validated();
         try {
-            $response = $this->adminUserService->register($user);
+            $response = $this->adminUserService->register($data);
             Auth::login($response['user']);
             if ($response['status'] == 'success') {
                 if ($response['is_verified'] == 1) {

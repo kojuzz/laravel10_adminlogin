@@ -30,7 +30,8 @@ class AdminUserService
                 $response = [
                     "is_verified" => 1,
                     "status" => "success",
-                    "message" => "Login successfully",
+                    "message" => "Registration successfully",
+                    "access_token" => $user->createToken('token')->plainTextToken,
                     "user" => $user
                 ];
             } else {
@@ -38,19 +39,20 @@ class AdminUserService
                 $response = [
                     "is_verified" => 0,
                     "status" => "success",
-                    "message" => "Please check your email for verification code",
+                    "message" => "Registration successfully, Please check your email for verification code",
+                    "otp_token" => $otp->token,
                     "user" => $user
                 ];
             }
             DB::commit();
-            return $response;
         } catch (Exception $e) {
             DB::rollBack();
-            return [
+            $response = [
                 "status" => "failed",
                 "message" => $e->getMessage()
             ];
         }
+        return $response;
     }
 
     // Login
@@ -63,36 +65,40 @@ class AdminUserService
             'password' => $data['password'],
         ];
         try {
-            if (Auth::attempt($credentials, $remember)) {
-                $user = Auth::user();
+            if (Auth::guard('web')->attempt($credentials, $remember)) {
+                $user = Auth::guard('web')->user();
+
                 if ($user->email_verified_at) {
-                    return $response = [
+                    $response = [
                         "is_verified" => 1,
                         "status" => "success",
                         "message" => "Login successfully",
+                        "access_token" => $user->createToken('token')->plainTextToken,
                         "user" => $user
                     ];
                 } else {
                     $otp = $this->otpRepository->send($user->email);
-                    return $response = [
+                    $response = [
                         "is_verified" => 0,
                         "status" => "success",
                         "message" => "Please check your email for verification code",
+                        "otp_token" => $otp->token,
                         "user" => $user
                     ];
                 }
             } else {
-                return [
+                $response = [
                     "status" => "failed",
                     "message" => "Invalid email or password"
                 ];
             }
         } catch (Exception $e) {
-            return [
+            $response = [
                 "status" => "failed",
-                "message" => "Invalid credentials"
+                "message" => "Something went wrong. Please try again."
             ];
         }
+        return $response;
     }
 
     // Verify
@@ -100,22 +106,31 @@ class AdminUserService
     {
         try {
             DB::beginTransaction();
+            $decrypted_otp_token = decrypt($token);
+            $user = $this->adminUserRepository->getByEmail($decrypted_otp_token['email']);
+            if (!$user) {
+                throw new Exception('The User is not found');
+            }
             $this->otpRepository->verify($token, $otp);
             $this->adminUserRepository->update([
                 'email_verified_at' => now()
-            ], Auth::user()->id);
+            ], $user->id);
             DB::commit();
-            return [
+            $response = [
+                "is_verified" => 1,
                 "status" => "success",
-                "message" => "Verification completed successfully"
+                "message" => "Verification completed successfully",
+                "access_token" => $user->createToken('token')->plainTextToken,
+                "user" => $user
             ];
         } catch (Exception $e) {
             DB::rollBack();
-            return [
+            $response = [
                 "status" => "failed",
                 "message" => $e->getMessage()
             ];
         }
+        return $response;
     }
 
     // Resend OTP
@@ -123,17 +138,19 @@ class AdminUserService
     {
         try {
             $otp = $this->otpRepository->resend($token);
-            return [
+            $response = [
+                "is_verified" => 0,
                 "status" => "success",
                 "message" => "OTP sent successfully",
                 "otp" => $otp
             ];
         } catch (Exception $e) {
-            return [
+            $response = [
                 "status" => "failed",
                 "message" => $e->getMessage()
             ];
         }
+        return $response;
     }
 
     // Forgot Password

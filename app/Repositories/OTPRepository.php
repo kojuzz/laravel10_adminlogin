@@ -27,7 +27,7 @@ class OTPRepository
             $otp = OTP::create([
                 'email' => $email,
                 'code' => $this->otpCode(),
-                'expired_at' => now()->addMinutes(1),
+                'expired_at' => now()->addMinutes(10),
                 'token' => encrypt(['uuid' => Str::uuid(), 'email' => $email])
             ]);
             if (config('app.env') == 'production') {
