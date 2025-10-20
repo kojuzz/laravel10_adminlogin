@@ -16,8 +16,10 @@ class PageController extends Controller
     {
         return view('auth.forgot-password');
     }
-    public function twoStep()
+    public function twoStep($otpToken)
     {
-        return view('auth.two-step');
+        return view('auth.two-step', [
+            'otpToken' => $otpToken
+        ]);
     }
 }

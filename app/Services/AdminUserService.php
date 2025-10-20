@@ -6,6 +6,7 @@ use App\Repositories\AdminUserRepository;
 use App\Repositories\OTPRepository;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AdminUserService
@@ -21,8 +22,34 @@ class AdminUserService
     // Register
     public function register($data)
     {
-        $response = $this->adminUserRepository->create($data);
-        return $response;
+        try {
+            DB::beginTransaction();
+            $user = $this->adminUserRepository->create($data);
+            if ($user->email_verified_at) {
+                $response = [
+                    "is_verified" => 1,
+                    "status" => "success",
+                    "message" => "Login successfully",
+                    "user" => $user
+                ];
+            } else {
+                $otp = $this->otpRepository->send($user->email);
+                $response = [
+                    "is_verified" => 0,
+                    "status" => "success",
+                    "message" => "Please check your email for verification code",
+                    "user" => $user
+                ];
+            }
+            DB::commit();
+            return $response;
+        } catch (Exception $e) {
+            DB::rollBack();
+            return [
+                "status" => "failed",
+                "message" => $e->getMessage()
+            ];
+        }
     }
 
     // Login
@@ -36,25 +63,47 @@ class AdminUserService
         ];
         if (Auth::attempt($credentials, $remember)) {
             $user = Auth::user();
-            if($user->email_verified_at){
+            if ($user->email_verified_at) {
                 return $response = [
-                    "is_verified" => true,
+                    "is_verified" => 1,
                     "status" => "success",
                     "message" => "Login successfully",
                     "user" => $user
                 ];
-            }else{
+            } else {
                 $otp = $this->otpRepository->send($user->email);
-                Auth::logout();
                 return $response = [
-                    "is_verified" => false,
+                    "is_verified" => 0,
                     "status" => "success",
                     "message" => "Please check your email for verification code",
                     "user" => $user
                 ];
             }
+            return $response;
         }
-        return null;
+    }
+
+    // Verify
+    public function verify($token, $otp)
+    {
+        try {
+            DB::beginTransaction();
+            $this->otpRepository->verify($token, $otp);
+            $this->adminUserRepository->update([
+                'email_verified_at' => now()
+            ], Auth::user()->id);
+            DB::commit();
+            return [
+                "status" => "success",
+                "message" => "Verification completed successfully"
+            ];
+        } catch (Exception $e) {
+            DB::rollBack();
+            return [
+                "status" => "failed",
+                "message" => $e->getMessage()
+            ];
+        }
     }
 
     // Update

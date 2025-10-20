@@ -38,9 +38,7 @@
 
 <body>
     {{-- Content --}}
-    @guest
-        @yield("content")
-    @endguest
+    @yield("content")
 
     {{-- Core JS --}}
     <script src="{{ asset("assets/js/jquery.js") }}"></script>

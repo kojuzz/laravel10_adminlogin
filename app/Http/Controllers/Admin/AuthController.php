@@ -7,7 +7,9 @@ use App\Http\Requests\AdminUserLoginRequest;
 use App\Http\Requests\AdminUserRegisterRequest;
 use App\Services\AdminUserService;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class AuthController extends Controller
 {
@@ -22,9 +24,17 @@ class AuthController extends Controller
     {
         $user = $request->validated();
         try {
-            $user = $this->adminUserService->register($user);
-            Auth::login($user);
-            return redirect()->route("admin.dashboard");
+            $response = $this->adminUserService->register($user);
+            Auth::login($response['user']);
+            if ($response['status'] == 'success') {
+                if ($response['is_verified'] == 1) {
+                    return redirect()->route("admin.dashboard")->with('success', $response['message']);
+                } else {
+                    return redirect()->route("two-step", [$response['otp_token']])->with('success', $response['message']);
+                }
+            } else {
+                return back()->with("failed", $response['message'])->withInput();
+            }
         } catch (Exception $e) {
             return back()->with([
                 "failed" => $e->getMessage()
@@ -39,10 +49,10 @@ class AuthController extends Controller
         try {
             $response = $this->adminUserService->login($user);
             if ($response['status'] == 'success') {
-                if($response['is_verified']){
+                if ($response['is_verified'] == 1) {
                     return redirect()->route("admin.dashboard")->with('success', $response['message']);
-                }else{
-                    return redirect()->route("two-step")->with('success', $response['message']);
+                } else {
+                    return redirect()->route("two-step", [$response['otp_token']])->with('success', $response['message']);
                 }
             } else {
                 return back()->with("failed", $response['message'])->withInput();
@@ -52,7 +62,22 @@ class AuthController extends Controller
         }
         return redirect()->route("login");
     }
-    
+
+    // Two Step
+    public function twoStep(Request $request)
+    {
+        $validated = $request->validate([
+            'otp_token' => 'required|string',
+            'otp' => 'required|string'
+        ]);
+        $response = $this->adminUserService->verify($validated['otp_token'], $validated['otp']);
+        if ($response['status'] == 'failed') {
+            // return redirect()->route("two-step", [$validated['otp_token']])->with("failed", $response['message']);
+            return redirect()->route("two-step", ['otpToken' => $validated['otp_token']])->with("failed", $response['message']);
+        } 
+        return redirect()->route("admin.dashboard")->with('success', $response['message']);
+    }
+
     // Forgot Password
     public function forgotPassword()
     {

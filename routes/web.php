@@ -23,13 +23,16 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [PageController::class, 'register'])->name('register');
     Route::get('/login', [PageController::class, 'login'])->name('login');
     Route::get('/forgot-password', [PageController::class, 'forgotPassword'])->name('forgot-password');
-    Route::get('/two-step', [PageController::class, 'twoStep'])->name('two-step');
     
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
 
-Route::middleware('auth')->group(function () {
+Route::get('/two-step/{otpToken}', [PageController::class, 'twoStep'])->name('two-step');
+Route::post('/two-step', [AuthController::class, 'twoStep'])->name('two-step.post')->middleware('auth');
+Route::get('/logout', [AuthController::class, 'logout'])->name('admin.logout')->middleware('auth');
+
+Route::middleware('auth', 'checkVerified')->group(function () {
     Route::get('/', [AdminPageController::class, 'index'])->name('admin.dashboard');
     Route::get('/manage-profile', [AdminPageController::class, 'edit'])->name('admin.edit');
     Route::get('/change-password', [AdminPageController::class, 'changePassword'])->name('admin.change-password');
@@ -38,7 +41,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/manage-profile', [ProfileController::class, 'update'])->name('admin.update');
     Route::post('/change-password', [ProfileController::class, 'changePassword'])->name('admin.change-password.post');
 
-    Route::get('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 });
 
 Route::fallback(function () {
