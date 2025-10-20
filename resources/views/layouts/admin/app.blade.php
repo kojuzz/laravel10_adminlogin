@@ -56,6 +56,9 @@
                             @yield("content")
                         </div>
                     </div>
+
+                    {{-- Footer --}}
+                    @include("layouts.admin.footer")
                 </div>
             </div>
         </div>
