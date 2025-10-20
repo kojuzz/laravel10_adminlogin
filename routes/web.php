@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\ForgotPasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,17 +23,22 @@ Route::view('/welcome', 'welcome')->name('welcome');
 Route::middleware('guest')->group(function () {
     Route::get('register', [PageController::class, 'register'])->name('register');
     Route::get('login', [PageController::class, 'login'])->name('login');
-    Route::get('forgot-password', [PageController::class, 'forgotPassword'])->name('forgot-password');
-    
+
     Route::post('register', [AuthController::class, 'register'])->name('register.post');
     Route::post('login', [AuthController::class, 'login'])->name('login.post');
+
+    Route::get('forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->name('forgot-password');
+    Route::post('forgot-password', [ForgotPasswordController::class, 'forgotPasswordPost'])->name('forgot-password.post');
+    Route::get('reset-password/{token}', [ForgotPasswordController::class, 'resetPassword'])->name('reset-password');
+    Route::post('reset-password', [ForgotPasswordController::class, 'resetPasswordPost'])->name('reset-password.post');
 });
 
-Route::get('two-step', [AuthController::class, 'twoStep'])->name('two-step');
-Route::post('two-step', [AuthController::class, 'twoStepPost'])->name('two-step.post')->middleware('auth');
-Route::post('resend-otp', [AuthController::class, 'resendOTP'])->name('resend-otp')->middleware('auth');
-Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout')->middleware('auth');
-Route::post('forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot-password.post');
+Route::middleware('auth')->group(function () {
+    Route::get('two-step', [AuthController::class, 'twoStep'])->name('two-step');
+    Route::post('two-step', [AuthController::class, 'twoStepPost'])->name('two-step.post');
+    Route::post('resend-otp', [AuthController::class, 'resendOTP'])->name('resend-otp');
+    Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
+});
 
 Route::middleware('auth', 'checkVerified')->group(function () {
     Route::get('/', [AdminPageController::class, 'index'])->name('admin.dashboard');
@@ -42,7 +48,6 @@ Route::middleware('auth', 'checkVerified')->group(function () {
 
     Route::post('manage-profile', [ProfileController::class, 'update'])->name('admin.update');
     Route::post('change-password', [ProfileController::class, 'changePassword'])->name('admin.change-password.post');
-
 });
 
 Route::fallback(function () {

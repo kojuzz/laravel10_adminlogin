@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use Illuminate\Support\Str;
 use App\Models\User;
+use App\Notifications\PasswordReset;
+use Exception;
 
 class AdminUserRepository
 {
@@ -26,5 +28,16 @@ class AdminUserRepository
     public function update($data, $id)
     {
         return User::where('id', $id)->update($data);
+    }
+
+    public function sendMail($email)
+    {
+        $token = Str::random(60);
+        $user = User::where('email', $email)->first();
+        if (!$user) {
+            throw new Exception("User not registered. Please register first.");
+        }
+        $user->notify(new PasswordReset($token, $email));
+        return true;
     }
 }

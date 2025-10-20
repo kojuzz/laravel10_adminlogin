@@ -14,8 +14,4 @@ class PageController extends Controller
     {
         return view('auth.register');
     }
-    public function forgotPassword()
-    {
-        return view('auth.forgot-password');
-    }
 }

@@ -61,7 +61,6 @@ class AuthController extends Controller
         } catch (Exception $e) {
             return back()->with("failed", $e->getMessage())->withInput();
         }
-        return redirect()->route("login");
     }
 
     // Two Step
@@ -106,19 +105,6 @@ class AuthController extends Controller
             return redirect()->route("two-step", ['otpToken' => $validated['otp_token']])->with("failed", $response['message']);
         }
         return redirect()->route("two-step", ['otpToken' => $validated['otp_token']])->with("success", $response['message']);
-    }
-
-    // Forgot Password
-    public function forgotPassword(Request $request)
-    {
-        $validated = $request->validate([
-            'email' => 'required|email'
-        ]);
-        $response = $this->adminUserService->forgotPassword($validated['email']);
-        if ($response['status'] == 'failed') {
-            return redirect()->route("forgot-password")->with("failed", $response['message']);
-        }
-        return redirect()->route("forgot-password")->with("success", $response['message']);
     }
 
     // Logout

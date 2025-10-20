@@ -62,25 +62,36 @@ class AdminUserService
             $loginField => $data['email-username'],
             'password' => $data['password'],
         ];
-        if (Auth::attempt($credentials, $remember)) {
-            $user = Auth::user();
-            if ($user->email_verified_at) {
-                return $response = [
-                    "is_verified" => 1,
-                    "status" => "success",
-                    "message" => "Login successfully",
-                    "user" => $user
-                ];
+        try {
+            if (Auth::attempt($credentials, $remember)) {
+                $user = Auth::user();
+                if ($user->email_verified_at) {
+                    return $response = [
+                        "is_verified" => 1,
+                        "status" => "success",
+                        "message" => "Login successfully",
+                        "user" => $user
+                    ];
+                } else {
+                    $otp = $this->otpRepository->send($user->email);
+                    return $response = [
+                        "is_verified" => 0,
+                        "status" => "success",
+                        "message" => "Please check your email for verification code",
+                        "user" => $user
+                    ];
+                }
             } else {
-                $otp = $this->otpRepository->send($user->email);
-                return $response = [
-                    "is_verified" => 0,
-                    "status" => "success",
-                    "message" => "Please check your email for verification code",
-                    "user" => $user
+                return [
+                    "status" => "failed",
+                    "message" => "Invalid email or password"
                 ];
             }
-            return $response;
+        } catch (Exception $e) {
+            return [
+                "status" => "failed",
+                "message" => "Invalid credentials"
+            ];
         }
     }
 
@@ -129,16 +140,36 @@ class AdminUserService
     public function forgotPassword($email)
     {
         try {
-            $user = User::where('email', $email)->first();
-            if (!$user) {
-                return [
-                    "status" => "failed",
-                    "message" => "User not registered."
-                ];
-            }
+            $mail = $this->adminUserRepository->sendMail($email);
             return [
                 "status" => "success",
                 "message" => "Email sent successfully"
+            ];
+        } catch (Exception $e) {
+            return [
+                "status" => "failed",
+                "message" => $e->getMessage()
+            ];
+        }
+    }
+
+    // Reset Password
+    public function resetPassword($token, $email, $password)
+    {
+        $user = User::where('email', $email)->first();
+        if (!$user) {
+            return [
+                "status" => "failed",
+                "message" => "User not found"
+            ];
+        }
+        try {
+            $user = $this->adminUserRepository->update([
+                'password' => Hash::make($password)
+            ], $user->id);
+            return [
+                "status" => "success",
+                "message" => "Password reset successfully"
             ];
         } catch (Exception $e) {
             return [
