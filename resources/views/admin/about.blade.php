@@ -23,6 +23,7 @@
                 <li>Two-Step Verification (via Email) for enhanced account security</li>
                 <li>Forgot Password and Reset Password functionality to easily recover access</li>
                 <li>Admin Profile Management and Change Password features for user account maintenance</li>
+                <li>API for Admin User Management</li>
             </ul>
             </p>
             <p class="card-text">

@@ -18,10 +18,12 @@ use Illuminate\Support\Facades\Route;
 Route::post("login", [AuthController::class, "login"]);
 Route::post("register", [AuthController::class, "register"]);
 Route::post('two-step-verification', [AuthController::class, 'twoStepPost']);
+Route::post('resend-otp', [AuthController::class, 'resendOTP']);
+Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
 
-Route::get("profile", [ProfileController::class, "profile"])->middleware('auth:sanctum');
-Route::post("logout", [AuthController::class, "logout"])->middleware('auth:sanctum');
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get("profile", [ProfileController::class, "profile"]);
+    Route::post("update", [ProfileController::class, "update"]);
+    Route::post("change-password", [ProfileController::class, "changePassword"]);
+    Route::post("logout", [AuthController::class, "logout"]);
+});

@@ -84,6 +84,36 @@ class AuthController extends Controller
         return response()->json($response);
     }
 
+    public function resendOTP(Request $request)
+    {
+        $validated = $request->validate([
+            'otp_token' => 'required|string'
+        ]);
+        $response = $this->adminUserService->resendOTP($validated['otp_token']);
+        if ($response['status'] == 'failed') {
+            return response()->json([
+                "status" => "failed",
+                "message" => $response['message']
+            ]);
+        }
+        return response()->json($response);
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email'
+        ]);
+        $response = $this->adminUserService->forgotPassword($validated['email']);
+        if ($response['status'] == 'failed') {
+            return response()->json([
+                "status" => "failed",
+                "message" => $response['message']
+            ]);
+        }
+        return response()->json($response);
+    }
+
     public function logout(Request $request)
     {
         try {

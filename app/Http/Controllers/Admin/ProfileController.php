@@ -20,9 +20,9 @@ class ProfileController extends Controller
     // Update Profile
     public function update(AdminUserUpdateRequest $request)
     {
-        $user = $request->validated();
+        $data = $request->validated();
         $id = Auth::user()->id;
-        $this->adminUserService->update($user, $id);
+        $this->adminUserService->update($data, $id);
         return redirect()->route('admin.dashboard')->with('success', 'Profile updated successfully');
     }
 
