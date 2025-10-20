@@ -1,6 +1,6 @@
 @extends("layouts.admin.app")
 
-@section("title", "Dashboard")
+@section("title", "Edit Profile")
 
 @section("content")
     {{-- Breadcrumb --}}

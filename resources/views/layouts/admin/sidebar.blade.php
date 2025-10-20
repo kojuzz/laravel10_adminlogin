@@ -42,7 +42,7 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="tables-datatables-advanced.html" class="menu-link">
+                    <a href="{{ route("admin.about") }}" class="menu-link">
                         <div data-i18n="About">About</div>
                     </a>
                 </li>
@@ -55,7 +55,7 @@
         </li>
         <li class="menu-item">
             <a href="{{ route("welcome") }}" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-map"></i>
+                <i class="menu-icon tf-icons ti ti-lifebuoy"></i>
                 <div data-i18n="Leaflet Maps">Welcome Page</div>
             </a>
         </li>

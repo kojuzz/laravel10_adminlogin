@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::view('/welcome', 'welcome')->name('welcome');
+Route::view('/privacy-policy', 'auth.privacy-policy')->name('privacy-policy');
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [PageController::class, 'register'])->name('register');
@@ -42,6 +43,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth', 'checkVerified')->group(function () {
     Route::get('/', [AdminPageController::class, 'index'])->name('admin.dashboard');
+    Route::get('about', [AdminPageController::class, 'about'])->name('admin.about');
     Route::get('manage-profile', [AdminPageController::class, 'edit'])->name('admin.edit');
     Route::get('change-password', [AdminPageController::class, 'changePassword'])->name('admin.change-password');
     Route::get('admin-list', [AdminPageController::class, 'adminList'])->name('admin.admin-list');

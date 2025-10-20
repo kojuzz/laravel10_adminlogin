@@ -1,6 +1,6 @@
 @extends("layouts.admin.app")
 
-@section("title", "Dashboard")
+@section("title", "Change Password")
 
 @section("content")
     {{-- Flash Message --}}

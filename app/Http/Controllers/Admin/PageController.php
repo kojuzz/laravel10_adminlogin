@@ -8,24 +8,37 @@ use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
 {
+    protected $user;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            return $next($request);
+        });
+    }
     public function index()
     {
         return view('admin.dashboard', [
-            'user' => Auth::user()
+            'user' => $this->user
         ]);
+    }
+
+    public function about()
+    {
+        return view('admin.about');
     }
 
     public function edit()
     {
         return view('admin.edit', [
-            'user' => Auth::user()
+            'user' => $this->user
         ]);
     }
 
     public function changePassword()
     {
         return view('admin.change-password', [
-            'user' => Auth::user()
+            'user' => $this->user
         ]);
     }
 

@@ -80,7 +80,7 @@
                                     <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" />
                                     <label class="form-check-label" for="terms-conditions">
                                         I agree to
-                                        <a href="javascript:void(0);">privacy policy & terms</a>
+                                        <a href="{{ route("privacy-policy") }}">privacy policy & terms</a>
                                     </label>
                                 </div>
                             </div>
@@ -94,26 +94,6 @@
                                 <span>Sign in instead</span>
                             </a>
                         </p>
-
-                        {{-- Divider --}}
-                        <div class="divider my-4">
-                            <div class="divider-text">or</div>
-                        </div>
-
-                        {{-- Social Link --}}
-                        <div class="d-flex justify-content-center">
-                            <a href="javascript:;" class="btn btn-icon btn-label-facebook me-3">
-                                <i class="tf-icons fa-brands fa-facebook-f fs-5"></i>
-                            </a>
-
-                            <a href="javascript:;" class="btn btn-icon btn-label-google-plus me-3">
-                                <i class="tf-icons fa-brands fa-google fs-5"></i>
-                            </a>
-
-                            <a href="javascript:;" class="btn btn-icon btn-label-twitter">
-                                <i class="tf-icons fa-brands fa-twitter fs-5"></i>
-                            </a>
-                        </div>
                     </div>
                 </div>
                 

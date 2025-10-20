@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-sm-6 mb-4">
                     <div class="card card-border-shadow-primary h-100">
-                        <a href="{{ route("admin.edit") }}" class="card-body">
+                        <a href="{{ route("admin.about") }}" class="card-body">
                             <div class="d-flex align-items-center mb-2 pb-1">
                                 <h4 class="ms-1 mb-0">About</h4>
                             </div>
