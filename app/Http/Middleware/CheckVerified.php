@@ -26,9 +26,12 @@ class CheckVerified
             $otp = OTP::where('email', $user->email)->where('expired_at', '>=', now())->first();
             if (!$otp) {
                 Auth::logout();
-                return redirect()->route('login')->with('failed', 'Verification expired. Please log in again.');
+                return redirect()->route('login')->with('failed', 'OTP expired. Please log in again.');
             }
-            return redirect()->route('two-step', ['otpToken' => $otp->token])->with('warning', 'Please verify your email first.');
+            return redirect()->route('two-step')->with([
+                'otpToken' => $otp->token,
+                'warning' => 'Please verify your email first.'
+            ]);
         }
         return $next($request);
     }

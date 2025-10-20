@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminUserLoginRequest;
 use App\Http\Requests\AdminUserRegisterRequest;
+use App\Models\OTP;
 use App\Services\AdminUserService;
 use Exception;
 use Illuminate\Http\Request;
@@ -64,7 +65,23 @@ class AuthController extends Controller
     }
 
     // Two Step
-    public function twoStep(Request $request)
+    public function twoStep()
+    {
+        $user = Auth::user();
+        $otp = OTP::where('email', $user->email)->where('expired_at', '>=', now())->first();
+
+        if (!$otp) {
+            Auth::logout();
+            return redirect()->route('login')->with('failed', 'OTP expired. Please log in again.');
+        }
+        
+        return view('auth.two-step', [
+            'otpToken' => $otp->token
+        ]);
+    }
+
+    // Two Step Post
+    public function twoStepPost(Request $request)
     {
         $validated = $request->validate([
             'otp_token' => 'required|string',
@@ -74,14 +91,34 @@ class AuthController extends Controller
         if ($response['status'] == 'failed') {
             // return redirect()->route("two-step", [$validated['otp_token']])->with("failed", $response['message']);
             return redirect()->route("two-step", ['otpToken' => $validated['otp_token']])->with("failed", $response['message']);
-        } 
+        }
         return redirect()->route("admin.dashboard")->with('success', $response['message']);
     }
 
-    // Forgot Password
-    public function forgotPassword()
+    // Resend OTP
+    public function resendOTP(Request $request)
     {
-        return view('auth.forgot-password');
+        $validated = $request->validate([
+            'otp_token' => 'required|string'
+        ]);
+        $response = $this->adminUserService->resendOTP($validated['otp_token']);
+        if ($response['status'] == 'failed') {
+            return redirect()->route("two-step", ['otpToken' => $validated['otp_token']])->with("failed", $response['message']);
+        }
+        return redirect()->route("two-step", ['otpToken' => $validated['otp_token']])->with("success", $response['message']);
+    }
+
+    // Forgot Password
+    public function forgotPassword(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email'
+        ]);
+        $response = $this->adminUserService->forgotPassword($validated['email']);
+        if ($response['status'] == 'failed') {
+            return redirect()->route("forgot-password")->with("failed", $response['message']);
+        }
+        return redirect()->route("forgot-password")->with("success", $response['message']);
     }
 
     // Logout

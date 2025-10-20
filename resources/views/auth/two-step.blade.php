@@ -66,11 +66,15 @@
                             <input type="hidden" name="otp_token" value="{{ $otpToken }}">
                         </div>
                         <button class="btn btn-primary d-grid w-100 mb-3">Verify my account</button>
-                        <div class="text-center">
-                            Didn't get the code?
-                            <a href="javascript:void(0);"> Resend </a>
-                        </div>
                     </form>
+                    <div class="text-center">
+                        <form action="{{ route("resend-otp") }}" method="POST">
+                            @csrf
+                            Didn't get the code?
+                            <input type="hidden" name="otp_token" value="{{ $otpToken }}">
+                            <button type="submit" class="btn btn-outline-none btn-link btn-md px-1">Resend</button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <!-- / Two Steps Verification -->

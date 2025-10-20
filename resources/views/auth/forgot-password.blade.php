@@ -7,6 +7,14 @@
 @endsection
 
 @section("content")
+    {{-- Flash Message --}}
+    <div class="row">
+        @if (session("success"))
+            <x-flash :msg="session('success')" />
+        @elseif (session("failed"))
+            <x-flash :msg="session('failed')" bg="alert-danger" />
+        @endif
+    </div>
 
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
@@ -30,7 +38,8 @@
                         <p class="mb-4">Enter your email and we'll send you instructions to reset your password</p>
 
                         {{-- Form --}}
-                        <form id="formAuthentication" class="mb-3" action="auth-reset-password-basic.html" method="GET">
+                        <form id="formAuthentication" class="mb-3" action="{{ route("forgot-password.post") }}" method="POST">
+                            @csrf
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="text" class="form-control" id="email" name="email"

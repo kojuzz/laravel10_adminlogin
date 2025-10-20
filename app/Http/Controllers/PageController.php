@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OTP;
+
 class PageController extends Controller
 {
     public function login()
@@ -15,11 +17,5 @@ class PageController extends Controller
     public function forgotPassword()
     {
         return view('auth.forgot-password');
-    }
-    public function twoStep($otpToken)
-    {
-        return view('auth.two-step', [
-            'otpToken' => $otpToken
-        ]);
     }
 }

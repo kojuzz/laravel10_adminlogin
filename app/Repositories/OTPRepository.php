@@ -27,10 +27,12 @@ class OTPRepository
             $otp = OTP::create([
                 'email' => $email,
                 'code' => $this->otpCode(),
-                'expired_at' => now()->addMinutes(10),
+                'expired_at' => now()->addMinutes(1),
                 'token' => encrypt(['uuid' => Str::uuid(), 'email' => $email])
             ]);
-            Notification::route('mail', $email)->notify(new TwoStepVerification($otp));
+            if (config('app.env') == 'production') {
+                Notification::route('mail', $email)->notify(new TwoStepVerification($otp));
+            }
         }
         return $otp;
     }
@@ -49,6 +51,20 @@ class OTPRepository
             throw new Exception('The OTP code is incorrect');
         }
         $otp->delete();
+        return $otp;
+    }
+
+    public function resend($otp_token)
+    {
+        $otp = OTP::where('token', $otp_token)->first();
+        if (!$otp) {
+            throw new Exception('Invalid OTP');
+        }
+        if ($otp->expired_at > now()) {
+            throw new Exception('Wait for OTP to expire. The OTP will expire in ' . now()->diff($otp->expired_at)->format('%i minutes and %s seconds'));
+        }
+        $otp->delete();
+        $otp = $this->send($otp->email);
         return $otp;
     }
 }

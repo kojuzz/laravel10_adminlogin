@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Repositories\AdminUserRepository;
 use App\Repositories\OTPRepository;
 use Exception;
@@ -99,6 +100,47 @@ class AdminUserService
             ];
         } catch (Exception $e) {
             DB::rollBack();
+            return [
+                "status" => "failed",
+                "message" => $e->getMessage()
+            ];
+        }
+    }
+
+    // Resend OTP
+    public function resendOTP($token)
+    {
+        try {
+            $otp = $this->otpRepository->resend($token);
+            return [
+                "status" => "success",
+                "message" => "OTP sent successfully",
+                "otp" => $otp
+            ];
+        } catch (Exception $e) {
+            return [
+                "status" => "failed",
+                "message" => $e->getMessage()
+            ];
+        }
+    }
+
+    // Forgot Password
+    public function forgotPassword($email)
+    {
+        try {
+            $user = User::where('email', $email)->first();
+            if (!$user) {
+                return [
+                    "status" => "failed",
+                    "message" => "User not registered."
+                ];
+            }
+            return [
+                "status" => "success",
+                "message" => "Email sent successfully"
+            ];
+        } catch (Exception $e) {
             return [
                 "status" => "failed",
                 "message" => $e->getMessage()
