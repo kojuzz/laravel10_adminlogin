@@ -46,4 +46,14 @@ class ProfileController extends Controller
             "message" => "Password changed successfully"
         ]);
     }
+
+    public function delete()
+    {
+        $user = Auth::user();
+        $this->adminUserService->delete($user->id);
+        return response()->json([
+            "status" => "success",
+            "message" => "Account deleted successfully"
+        ]);
+    }
 }
